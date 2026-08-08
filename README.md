@@ -141,18 +141,11 @@ Set these env vars on the web service (Dashboard → full-stack-e-commerce-platf
 |---------------------|----------------------------------------------------------|
 | `STRIPE_PUBLIC_KEY` | your Stripe publishable test key (optional)              |
 | `STRIPE_SECRET_KEY` | your Stripe secret test key (optional)                   |
+| `ADMIN_USERNAME`    | admin (optional) — superuser created automatically       |
+| `ADMIN_PASSWORD`    | your admin password (optional)                           |
+| `ADMIN_EMAIL`       | your email (optional)                                    |
 
-Then create an admin account (Dashboard → full-stack-e-commerce-platform-6gy3 → **Shell**):
-
-```bash
-python manage.py createsuperuser
-```
-
-And seed the 30 sample products:
-
-```bash
-python manage.py seed_data
-```
+On every deploy the **release command** automatically runs `migrate`, `setup_site`, `ensure_superuser` (creates the admin from `ADMIN_*` vars if missing), and `seed_data` (30 sample products). No Shell access is required — but the interactive Shell needs a paid plan anyway.
 
 > The app is live at `https://full-stack-e-commerce-platform-6gy3.onrender.com`.
 

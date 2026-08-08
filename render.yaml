@@ -14,7 +14,7 @@ services:
     healthCheckPath: /shop/
     buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput"
     startCommand: "gunicorn demo.wsgi:application --workers 2 --timeout 120"
-    releaseCommand: "python manage.py migrate && python manage.py setup_site"
+    releaseCommand: "python manage.py migrate && python manage.py setup_site && python manage.py ensure_superuser && python manage.py seed_data"
     envVars:
       - key: PYTHON_VERSION
         value: 3.12.6
@@ -37,6 +37,12 @@ services:
       - key: STRIPE_PUBLIC_KEY
         sync: false
       - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: ADMIN_EMAIL
         sync: false
     disk:
       name: media
