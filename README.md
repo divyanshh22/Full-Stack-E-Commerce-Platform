@@ -139,17 +139,17 @@ If you created the service manually, use these fields:
 
 **Build command:**
 ```
-pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate && python manage.py setup_site && python manage.py ensure_superuser && python manage.py seed_data
+pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate && python manage.py setup_site && python manage.py ensure_superuser
 ```
 
 **Start command:**
 ```
-gunicorn demo.wsgi:application --workers 2 --timeout 120
+python manage.py seed_data && gunicorn demo.wsgi:application --workers 2 --timeout 120
 ```
 
 **Release command** (only if your dashboard shows a Release Command field — otherwise skip; the build command already runs migrations):
 ```
-python manage.py migrate && python manage.py setup_site && python manage.py ensure_superuser && python manage.py seed_data
+python manage.py migrate && python manage.py setup_site && python manage.py ensure_superuser
 ```
 
 ### After the first deploy

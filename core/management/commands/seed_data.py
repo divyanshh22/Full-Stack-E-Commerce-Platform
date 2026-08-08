@@ -137,6 +137,7 @@ class Command(BaseCommand):
             src = os.path.join(src_dir, name)
             dst = os.path.join(media_root, name)
             if os.path.exists(src) and not os.path.exists(dst):
+                os.makedirs(media_root, exist_ok=True)
                 shutil.copy2(src, dst)
             return name
 
