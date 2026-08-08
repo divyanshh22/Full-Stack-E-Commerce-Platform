@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head_title %}{{ object.title }} — Django Shop{% endblock %}
+
+{% block content %}
+
+<nav class="breadcrumb container" aria-label="Breadcrumb">
+  <a href="/">Home</a>
+  <span class="sep"><i class="fa-solid fa-angle-right"></i></span>
+  <a href="/shop/">Shop</a>
+  <span class="sep"><i class="fa-solid fa-angle-right"></i></span>
+  <a href="{{ object.category.get_absolute_url }}">{{ object.category }}</a>
+  <span class="sep"><i class="fa-solid fa-angle-right"></i></span>
+  <span class="current">{{ object.title }}</span>
+</nav>
+
+<section class="section" style="padding-top: 16px;">
+  <div class="container">
+    <div class="detail-layout">
+      <!-- Media -->
+      <div>
+        <div class="detail-media">
+          <img src="{{ object.image.url }}" alt="{{ object.title }}">
+          {% if object.label %}
+          <div class="detail-badges">
+            <span class="product-badge {{ object.get_label_display }}">{{ object.get_label_display }}</span>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="detail-info">
+        <h1>{{ object.title }}</h1>
+        <div class="detail-meta">
+          <span><i class="fa-solid fa-tag"></i> {{ object.category }}</span>
+          {% if object.stock_no %}
+          <span><i class="fa-solid fa-barcode"></i> SKU: {{ object.stock_no }}</span>
+          {% endif %}
+        </div>
+
+        <div class="detail-price">
+          {% if object.discount_price %}
+          <span class="price-old" style="font-size: 20px;">${{ object.price }}</span>
+          <span class="price-new">${{ object.discount_price }}</span>
+          {% else %}
+          <span>${{ object.price }}</span>
+          {% endif %}
+        </div>
+
+        {% if object.description_short %}
+        <p class="detail-desc">{{ object.description_short }}</p>
+        {% endif %}
+
+        <div class="option-row">
+          <span class="opt-label">Size</span>
+          <select name="size">
+            <option value="">Choose a size</option>
+            <option>S</option>
+            <option>M</option>
+            <option>L</option>
+            <option>XL</option>
+          </select>
+        </div>
+
+        <div class="option-row">
+          <span class="opt-label">Color</span>
+          <select name="color">
+            <option value="">Choose a color</option>
+            <option>Black</option>
+            <option>White</option>
+            <option>Gray</option>
+            <option>Blue</option>
+          </select>
+        </div>
+
+        <div class="detail-actions">
+          <div class="qty">
+            <button type="button" class="qty-dec" aria-label="Decrease quantity"><i class="fa-solid fa-minus"></i></button>
+            <input type="number" class="qty-val" value="1" min="1" max="99" aria-label="Quantity">
+            <button type="button" class="qty-inc" aria-label="Increase quantity"><i class="fa-solid fa-plus"></i></button>
+          </div>
+          <a href="{{ object.get_add_to_cart_url }}" class="btn btn-dark btn-lg">
+            <i class="fa-solid fa-bag-shopping"></i> Add to Cart
+          </a>
+          <a href="{{ object.get_remove_from_cart_url }}" class="btn btn-outline btn-lg">
+            <i class="fa-solid fa-trash-can"></i> Remove
+          </a>
+        </div>
+
+        <div class="detail-stats">
+          <div class="detail-stat"><div class="k">Delivery</div><div class="v">Free over $100</div></div>
+          <div class="detail-stat"><div class="k">Returns</div><div class="v">30 days</div></div>
+          <div class="detail-stat"><div class="k">Payments</div><div class="v">Stripe / PayPal</div></div>
+        </div>
+
+        {% if object.description_long %}
+        <details class="accordion" open>
+          <summary>Description <span class="caret"><i class="fa-solid fa-chevron-down"></i></span></summary>
+          <div class="acc-body"><p>{{ object.description_long }}</p></div>
+        </details>
+        {% endif %}
+
+        <details class="accordion">
+          <summary>Shipping &amp; Returns <span class="caret"><i class="fa-solid fa-chevron-down"></i></span></summary>
+          <div class="acc-body">
+            <p>Free standard shipping on all orders over $100. Items can be returned within 30 days of delivery for a full refund.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if related_items %}
+<section class="section alt">
+  <div class="container">
+    <div class="section-title">
+      <div>
+        <span class="eyebrow">You may also like</span>
+        <h2>Related Products</h2>
+      </div>
+    </div>
+    <div class="products-grid">
+      {% for item in related_items %}
+        {% include "partials/product_card.html" %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% endblock content %}

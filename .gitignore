@@ -1,0 +1,18 @@
+env
+.venv
+venv
+*.env
+!.env.example
+**/*.pyc
+**/__pycache__
+media
+media_root
+static_root
+db.sqlite3
+*.log
+.DS_Store
+/.vscode
+/.idea
+
+# Accept these files in the repository
+!.gitignore

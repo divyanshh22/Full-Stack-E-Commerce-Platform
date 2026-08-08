@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block head_title %}Django Shop{% endblock %}</title>
+
+    <link rel="icon" type="image/png" href="{% static 'images/icons/favicon.png' %}" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/app.css' %}" />
+
+    {% block extra_head %}
+    {% endblock extra_head %}
+  </head>
+
+  <body>
+    {% include "nav.html" %}
+
+    {% if messages %}
+    <div class="toast-stack">
+      {% for message in messages %}
+      <div class="toast {{ message.tags }}" role="alert">
+        <span>{{ message }}</span>
+        <button type="button" class="toast-close" aria-label="Close">&times;</button>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% block content %}
+    {% endblock content %}
+
+    {% include "footer.html" %}
+    {% include "script.html" %}
+
+    {% block extra_body %}
+    {% endblock extra_body %}
+
+    {% block extra_scripts %}
+    {% endblock extra_scripts %}
+  </body>
+</html>

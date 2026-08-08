@@ -1,0 +1,23 @@
+{% extends "account/base.html" %}
+{% load i18n %}
+
+{% block head_title %}{% trans "Sign Out" %} — Django Shop{% endblock %}
+
+{% block content %}
+<div class="auth-wrap">
+  <div class="auth-card card" style="text-align: center;">
+    <div class="brand" style="justify-content: center;"><span class="dot"></span>Django Shop</div>
+    <h1 class="auth-title">{% trans "Sign Out" %}</h1>
+    <p class="auth-sub" style="margin-bottom: 22px;">{% trans 'Are you sure you want to sign out?' %}</p>
+
+    <form method="post" action="{% url 'account_logout' %}">
+      {% csrf_token %}
+      {% if redirect_field_value %}
+      <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+      {% endif %}
+      <button type="submit" class="btn btn-dark btn-lg btn-block">{% trans 'Sign Out' %}</button>
+      <a href="/" class="btn btn-outline btn-block" style="margin-top: 10px;">{% trans 'Cancel' %}</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

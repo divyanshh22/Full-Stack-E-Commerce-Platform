@@ -1,0 +1,76 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "E-mail Addresses" %} — Django Shop{% endblock %}
+
+{% block content %}
+<div class="auth-wrap">
+  <div class="auth-card card">
+    <div class="brand"><span class="dot"></span>Django Shop</div>
+    <h1 class="auth-title">{% trans "E-mail Addresses" %}</h1>
+    <p class="auth-sub" style="margin-bottom: 22px;">{% trans 'Manage the e-mail addresses associated with your account.' %}</p>
+
+    {% if user.emailaddress_set.all %}
+    <form action="{% url 'account_email' %}" class="email_list" method="post">
+      {% csrf_token %}
+      <fieldset style="border: 0; padding: 0; margin: 0 0 18px;">
+
+        {% for emailaddress in user.emailaddress_set.all %}
+        <div style="display: flex; align-items: center; gap: 10px; padding: 12px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 10px;">
+          <input id="email_radio_{{forloop.counter}}" type="radio" name="email" {% if emailaddress.primary or user.emailaddress_set.count == 1 %}checked="checked"{% endif %} value="{{ emailaddress.email }}" style="width: 16px; height: 16px; accent-color: var(--text); flex-shrink: 0;">
+          <label for="email_radio_{{forloop.counter}}" style="margin: 0; font-weight: 500; display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+            {{ emailaddress.email }}
+            {% if emailaddress.verified %}<span class="product-badge new" style="font-size: 10px;">{% trans "Verified" %}</span>
+            {% else %}<span class="product-badge sale" style="font-size: 10px;">{% trans "Unverified" %}</span>{% endif %}
+            {% if emailaddress.primary %}<span class="product-badge" style="font-size: 10px;">{% trans "Primary" %}</span>{% endif %}
+          </label>
+        </div>
+        {% endfor %}
+
+        <div class="summary-actions">
+          <button class="btn btn-outline btn-sm" type="submit" name="action_primary">{% trans 'Make Primary' %}</button>
+          <button class="btn btn-outline btn-sm" type="submit" name="action_send">{% trans 'Re-send Verification' %}</button>
+          <button class="btn btn-danger btn-sm" type="submit" name="action_remove">{% trans 'Remove' %}</button>
+        </div>
+      </fieldset>
+    </form>
+    {% else %}
+    <div class="card" style="background: var(--warning-soft); border-color: var(--warning-soft); margin-bottom: 18px;">
+      <p><strong>{% trans 'Warning:' %}</strong> {% trans "You currently do not have any e-mail address set up. You should really add an e-mail address so you can receive notifications, reset your password, etc." %}</p>
+    </div>
+    {% endif %}
+
+    <h2 style="font-size: 17px; margin-bottom: 14px;">{% trans "Add E-mail Address" %}</h2>
+
+    <form method="post" action="{% url 'account_email' %}" class="add_email">
+      {% csrf_token %}
+      {% for field in form %}
+      <div class="form-group">
+        {{ field.label_tag }}
+        {{ field }}
+        {% for error in field.errors %}<div class="field-error">{{ error }}</div>{% endfor %}
+      </div>
+      {% endfor %}
+      <button name="action_add" type="submit" class="btn btn-dark btn-block">{% trans "Add E-mail" %}</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+
+{% block extra_body %}
+<script type="text/javascript">
+(function() {
+  var message = "{% trans 'Do you really want to remove the selected e-mail address?' %}";
+  var actions = document.getElementsByName('action_remove');
+  if (actions.length) {
+    actions[0].addEventListener("click", function(e) {
+      if (! confirm(message)) {
+        e.preventDefault();
+      }
+    });
+  }
+})();
+</script>
+{% endblock %}
