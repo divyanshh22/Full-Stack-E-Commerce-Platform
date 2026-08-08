@@ -7,3 +7,6 @@ psycopg2-binary>=2.9
 stripe>=10.0
 Pillow>=10.0
 python-dotenv>=1.0
+gunicorn>=21.0
+whitenoise>=6.0
+dj-database-url>=2.0

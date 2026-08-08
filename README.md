@@ -121,6 +121,47 @@ python manage.py check              # run Django system checks
 python manage.py migrate            # apply database migrations
 ```
 
+## Deploying to Render
+
+The project ships with a `render.yaml` blueprint, a `Procfile`, and production-ready settings (WhiteNoise for static files, `DATABASE_URL` support, env-driven config) — so deploying is mostly one click.
+
+### One-click deploy (blueprint)
+
+1. Push this repository to GitHub (already done).
+2. Go to https://dashboard.render.com and click **New → Blueprint**.
+3. Select the `Full-Stack-E-Commerce-Platform` repo.
+4. Render reads `render.yaml`, creates the free PostgreSQL database (`ecommerce-db`) and web service (`django-shop`), and auto-generates `SECRET_KEY`.
+5. Click **Apply**. Render builds the app, runs `collectstatic`, then `migrate` + `setup_site` before starting the web service.
+
+### After the first deploy
+
+Set these env vars on the web service (Dashboard → django-shop → Environment):
+
+| Key                 | Value                                                    |
+|---------------------|----------------------------------------------------------|
+| `STRIPE_PUBLIC_KEY` | your Stripe publishable test key (optional)              |
+| `STRIPE_SECRET_KEY` | your Stripe secret test key (optional)                   |
+
+Then create an admin account (Dashboard → django-shop → **Shell**):
+
+```bash
+python manage.py createsuperuser
+```
+
+And seed the 30 sample products:
+
+```bash
+python manage.py seed_data
+```
+
+> The app will be live at `https://django-shop.onrender.com`. If you change the service name, update the `ALLOWED_HOSTS` / `SITE_DOMAIN` env vars to match your new `.onrender.com` URL.
+
+### Notes about the Render free tier
+
+- Free web services **spin down after 15 minutes** of inactivity and take ~1 minute to wake up on the next request.
+- Free PostgreSQL databases are limited to **1 GB** and **expire after 30 days** (upgrade to a paid instance to keep the data).
+- Uploaded images are stored on a 1 GB persistent disk mounted at `media_root`.
+
 ## Configuration Notes
 
 - **Emails** are printed to the console (`EMAIL_BACKEND = console`) and email verification is disabled, so sign-up works out of the box without an SMTP server.
