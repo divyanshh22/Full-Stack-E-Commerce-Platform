@@ -25,9 +25,9 @@ services:
       - key: SECRET_KEY
         generateValue: true
       - key: ALLOWED_HOSTS
-        value: "django-shop.onrender.com"
+        value: "full-stack-e-commerce-platform-6gy3.onrender.com"
       - key: SITE_DOMAIN
-        value: "django-shop.onrender.com"
+        value: "full-stack-e-commerce-platform-6gy3.onrender.com"
       - key: SITE_NAME
         value: "Django Shop"
       - key: DATABASE_URL

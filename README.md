@@ -130,19 +130,19 @@ The project ships with a `render.yaml` blueprint, a `Procfile`, and production-r
 1. Push this repository to GitHub (already done).
 2. Go to https://dashboard.render.com and click **New → Blueprint**.
 3. Select the `Full-Stack-E-Commerce-Platform` repo.
-4. Render reads `render.yaml`, creates the free PostgreSQL database (`ecommerce-db`) and web service (`django-shop`), and auto-generates `SECRET_KEY`.
+4. Render reads `render.yaml`, creates the free PostgreSQL database (`ecommerce-db`) and web service (`full-stack-e-commerce-platform-6gy3`), and auto-generates `SECRET_KEY`.
 5. Click **Apply**. Render builds the app, runs `collectstatic`, then `migrate` + `setup_site` before starting the web service.
 
 ### After the first deploy
 
-Set these env vars on the web service (Dashboard → django-shop → Environment):
+Set these env vars on the web service (Dashboard → full-stack-e-commerce-platform-6gy3 → Environment):
 
 | Key                 | Value                                                    |
 |---------------------|----------------------------------------------------------|
 | `STRIPE_PUBLIC_KEY` | your Stripe publishable test key (optional)              |
 | `STRIPE_SECRET_KEY` | your Stripe secret test key (optional)                   |
 
-Then create an admin account (Dashboard → django-shop → **Shell**):
+Then create an admin account (Dashboard → full-stack-e-commerce-platform-6gy3 → **Shell**):
 
 ```bash
 python manage.py createsuperuser
@@ -154,7 +154,7 @@ And seed the 30 sample products:
 python manage.py seed_data
 ```
 
-> The app will be live at `https://django-shop.onrender.com`. If you change the service name, update the `ALLOWED_HOSTS` / `SITE_DOMAIN` env vars to match your new `.onrender.com` URL.
+> The app is live at `https://full-stack-e-commerce-platform-6gy3.onrender.com`.
 
 ### Notes about the Render free tier
 
