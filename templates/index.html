@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load cart_template_tags %}
 {% block head_title %}Django Shop — Modern Fashion Store{% endblock %}
 
 {% block content %}
@@ -92,10 +93,10 @@
           <div class="product-row">
             <div>
               {% if item.discount_price %}
-              <span class="price-old">${{ item.price }}</span>
-              <span class="price price-new">${{ item.discount_price }}</span>
+              <span class="price-old">{{ item.price|inr }}</span>
+              <span class="price price-new">{{ item.discount_price|inr }}</span>
               {% else %}
-              <span class="price">${{ item.price }}</span>
+              <span class="price">{{ item.price|inr }}</span>
               {% endif %}
             </div>
             {% if item.discount_price %}
@@ -138,7 +139,7 @@
       <div class="feature">
         <div class="f-icon"><i class="fa-solid fa-truck-fast"></i></div>
         <h4>Free Delivery</h4>
-        <p>Free worldwide shipping on orders over $100</p>
+        <p>Free worldwide shipping on orders over ₹2,999</p>
       </div>
       <div class="feature">
         <div class="f-icon"><i class="fa-solid fa-rotate-left"></i></div>

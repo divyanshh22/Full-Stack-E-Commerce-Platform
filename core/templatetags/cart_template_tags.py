@@ -11,3 +11,12 @@ def cart_item_count(user):
         if qs.exists():
             return qs[0].items.count()
     return 0
+
+
+@register.filter
+def inr(value):
+    try:
+        value = round(float(value))
+    except (TypeError, ValueError):
+        value = 0
+    return '₹{:,}'.format(value)

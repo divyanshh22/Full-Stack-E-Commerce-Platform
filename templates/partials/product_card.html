@@ -1,4 +1,5 @@
 {% load static %}
+{% load cart_template_tags %}
 <div class="product-card">
   <div class="product-media">
     <a href="{{ item.get_absolute_url }}">
@@ -19,10 +20,10 @@
     <div class="product-row">
       <div>
         {% if item.discount_price %}
-        <span class="price-old">${{ item.price }}</span>
-        <span class="price price-new">${{ item.discount_price }}</span>
+        <span class="price-old">{{ item.price|inr }}</span>
+        <span class="price price-new">{{ item.discount_price|inr }}</span>
         {% else %}
-        <span class="price">${{ item.price }}</span>
+        <span class="price">{{ item.price|inr }}</span>
         {% endif %}
       </div>
       {% if item.discount_price %}

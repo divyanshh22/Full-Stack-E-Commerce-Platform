@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load cart_template_tags %}
 {% block head_title %}Payment — Django Shop{% endblock %}
 
 {% block content %}
@@ -32,7 +33,7 @@
             </div>
 
             <button id="stripeBtn" type="submit" class="btn btn-dark btn-lg btn-block">
-              <i class="fa-solid fa-lock"></i> Pay ${{ order.get_total }}
+              <i class="fa-solid fa-lock"></i> Pay {{ order.get_total|inr }}
             </button>
           </form>
 
@@ -99,7 +100,7 @@
           var errorElement = document.getElementById('card-errors');
           errorElement.textContent = result.error.message;
           btn.disabled = false;
-          btn.innerHTML = '<i class="fa-solid fa-lock"></i> Pay ${{ order.get_total }}';
+          btn.innerHTML = '<i class="fa-solid fa-lock"></i> Pay {{ order.get_total|inr }}';
         } else {
           var hiddenInput = document.createElement('input');
           hiddenInput.setAttribute('type', 'hidden');

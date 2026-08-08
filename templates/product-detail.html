@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load cart_template_tags %}
 {% block head_title %}{{ object.title }} — Django Shop{% endblock %}
 
 {% block content %}
@@ -41,10 +42,10 @@
 
         <div class="detail-price">
           {% if object.discount_price %}
-          <span class="price-old" style="font-size: 20px;">${{ object.price }}</span>
-          <span class="price-new">${{ object.discount_price }}</span>
+          <span class="price-old" style="font-size: 20px;">{{ object.price|inr }}</span>
+          <span class="price-new">{{ object.discount_price|inr }}</span>
           {% else %}
-          <span>${{ object.price }}</span>
+          <span>{{ object.price|inr }}</span>
           {% endif %}
         </div>
 
@@ -89,7 +90,7 @@
         </div>
 
         <div class="detail-stats">
-          <div class="detail-stat"><div class="k">Delivery</div><div class="v">Free over $100</div></div>
+          <div class="detail-stat"><div class="k">Delivery</div><div class="v">Free over ₹2,999</div></div>
           <div class="detail-stat"><div class="k">Returns</div><div class="v">30 days</div></div>
           <div class="detail-stat"><div class="k">Payments</div><div class="v">Stripe / PayPal</div></div>
         </div>
@@ -104,7 +105,7 @@
         <details class="accordion">
           <summary>Shipping &amp; Returns <span class="caret"><i class="fa-solid fa-chevron-down"></i></span></summary>
           <div class="acc-body">
-            <p>Free standard shipping on all orders over $100. Items can be returned within 30 days of delivery for a full refund.</p>
+            <p>Free standard shipping on all orders over ₹2,999. Items can be returned within 30 days of delivery for a full refund.</p>
           </div>
         </details>
       </div>
