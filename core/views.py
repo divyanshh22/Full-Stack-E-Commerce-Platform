@@ -139,7 +139,7 @@ class OrderSummaryView(LoginRequiredMixin, View):
 class ShopView(ListView):
     model = Item
     queryset = Item.objects.filter(is_active=True).order_by('id')
-    paginate_by = 6
+    paginate_by = 30
     template_name = "shop.html"
 
 
