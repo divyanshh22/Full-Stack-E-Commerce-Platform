@@ -131,7 +131,26 @@ The project ships with a `render.yaml` blueprint, a `Procfile`, and production-r
 2. Go to https://dashboard.render.com and click **New → Blueprint**.
 3. Select the `Full-Stack-E-Commerce-Platform` repo.
 4. Render reads `render.yaml`, creates the free PostgreSQL database (`ecommerce-db`) and web service (`full-stack-e-commerce-platform-6gy3`), and auto-generates `SECRET_KEY`.
-5. Click **Apply**. Render builds the app, runs `collectstatic`, then `migrate` + `setup_site` before starting the web service.
+5. Click **Apply**. Render builds the app, collects static files, runs migrations + setup, and seeds data before starting the web service.
+
+### Manual setup (dashboard fields)
+
+If you created the service manually, use these fields:
+
+**Build command:**
+```
+pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate && python manage.py setup_site && python manage.py ensure_superuser && python manage.py seed_data
+```
+
+**Start command:**
+```
+gunicorn demo.wsgi:application --workers 2 --timeout 120
+```
+
+**Release command** (only if your dashboard shows a Release Command field — otherwise skip; the build command already runs migrations):
+```
+python manage.py migrate && python manage.py setup_site && python manage.py ensure_superuser && python manage.py seed_data
+```
 
 ### After the first deploy
 
