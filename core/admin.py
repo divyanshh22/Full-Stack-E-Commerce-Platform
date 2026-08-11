@@ -91,7 +91,15 @@ class CategoryAdmin(admin.ModelAdmin):
 admin.site.register(Item, ItemAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Slide)
-admin.site.register(OrderItem)
+
+
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = ['item', 'user', 'size', 'color', 'quantity', 'ordered']
+    list_filter = ['ordered', 'size', 'color']
+    search_fields = ['item__title', 'user__username']
+
+
+admin.site.register(OrderItem, OrderItemAdmin)
 admin.site.register(Order, OrderAdmin)
 admin.site.register(Payment)
 admin.site.register(Coupon)
