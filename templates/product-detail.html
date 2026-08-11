@@ -55,25 +55,30 @@
 
         <div class="option-row">
           <span class="opt-label">Size</span>
-          <select name="size">
+          <select name="size" id="id-size" required>
             <option value="">Choose a size</option>
-            <option>S</option>
-            <option>M</option>
-            <option>L</option>
-            <option>XL</option>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+            <option value="XL">XL</option>
           </select>
         </div>
 
         <div class="option-row">
           <span class="opt-label">Color</span>
-          <select name="color">
+          <select name="color" id="id-color" required>
             <option value="">Choose a color</option>
-            <option>Black</option>
-            <option>White</option>
-            <option>Gray</option>
-            <option>Blue</option>
+            <option value="Black">Black</option>
+            <option value="White">White</option>
+            <option value="Gray">Gray</option>
+            <option value="Blue">Blue</option>
           </select>
         </div>
+
+        <p class="form-error" id="variant-error" style="display: none;">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          Please select a size and color before adding to cart.
+        </p>
 
         <div class="detail-actions">
           <div class="qty">
@@ -81,7 +86,7 @@
             <input type="number" class="qty-val" value="1" min="1" max="99" aria-label="Quantity">
             <button type="button" class="qty-inc" aria-label="Increase quantity"><i class="fa-solid fa-plus"></i></button>
           </div>
-          <a href="{{ object.get_add_to_cart_url }}" class="btn btn-dark btn-lg">
+          <a href="{{ object.get_add_to_cart_url }}" class="btn btn-dark btn-lg" id="add-to-cart-btn">
             <i class="fa-solid fa-bag-shopping"></i> Add to Cart
           </a>
           <a href="{{ object.get_remove_from_cart_url }}" class="btn btn-outline btn-lg">
@@ -130,5 +135,35 @@
   </div>
 </section>
 {% endif %}
+
+{% block extra_scripts %}
+<script>
+  (function () {
+    var btn = document.getElementById('add-to-cart-btn');
+    var size = document.getElementById('id-size');
+    var color = document.getElementById('id-color');
+    var err = document.getElementById('variant-error');
+    if (!btn || !size || !color) return;
+
+    function hideError() {
+      if (err) err.style.display = 'none';
+    }
+    size.addEventListener('change', hideError);
+    color.addEventListener('change', hideError);
+
+    btn.addEventListener('click', function (e) {
+      if (!size.value || !color.value) {
+        e.preventDefault();
+        if (err) err.style.display = 'block';
+        return;
+      }
+      var base = btn.href.split('?')[0];
+      btn.href = base +
+        '?size=' + encodeURIComponent(size.value) +
+        '&color=' + encodeURIComponent(color.value);
+    });
+  })();
+</script>
+{% endblock extra_scripts %}
 
 {% endblock content %}

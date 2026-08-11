@@ -26,7 +26,11 @@
 
           <div class="info">
             <h4><a href="{{ order_item.item.get_absolute_url }}">{{ order_item.item.title }}</a></h4>
-            <p class="meta">{{ order_item.item.category }}</p>
+            <p class="meta">{{ order_item.item.category }}
+              {% if order_item.size or order_item.color %}
+              · Size {{ order_item.size }}{% if order_item.color %} · {{ order_item.color }}{% endif %}
+              {% endif %}
+            </p>
             <div class="price-line">
               {% if order_item.item.discount_price %}
               <span class="price price-new">{{ order_item.get_total_discount_item_price|inr }}</span>
@@ -39,11 +43,11 @@
 
           <div class="actions">
             <div class="qty">
-              <a class="qty-dec" href="{% url 'core:remove-single-item-from-cart' order_item.item.slug %}" aria-label="Decrease"><i class="fa-solid fa-minus"></i></a>
+              <a class="qty-dec" href="{% url 'core:remove-single-item-from-cart' order_item.item.slug %}?size={{ order_item.size|urlencode }}&color={{ order_item.color|urlencode }}" aria-label="Decrease"><i class="fa-solid fa-minus"></i></a>
               <span class="qty-val">{{ order_item.quantity }}</span>
-              <a class="qty-inc" href="{% url 'core:add-to-cart' order_item.item.slug %}" aria-label="Increase"><i class="fa-solid fa-plus"></i></a>
+              <a class="qty-inc" href="{% url 'core:add-to-cart' order_item.item.slug %}?size={{ order_item.size|urlencode }}&color={{ order_item.color|urlencode }}" aria-label="Increase"><i class="fa-solid fa-plus"></i></a>
             </div>
-            <a class="icon-btn danger" href="{% url 'core:remove-from-cart' order_item.item.slug %}" aria-label="Remove item">
+            <a class="icon-btn danger" href="{% url 'core:remove-from-cart' order_item.item.slug %}?size={{ order_item.size|urlencode }}&color={{ order_item.color|urlencode }}" aria-label="Remove item">
               <i class="fa-solid fa-trash-can"></i>
             </a>
           </div>

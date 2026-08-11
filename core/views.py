@@ -231,14 +231,25 @@ class CheckoutView(View):
 @login_required
 def add_to_cart(request, slug):
     item = get_object_or_404(Item, slug=slug)
+    size = (request.GET.get('size') or request.POST.get('size') or '').strip()
+    color = (request.GET.get('color') or request.POST.get('color') or '').strip()
+    if not size or not color:
+        messages.error(
+            request,
+            "Please select a size and color before adding to cart."
+        )
+        return redirect("core:product", slug=slug)
+
     order_item, created = OrderItem.objects.get_or_create(
         item=item,
         user=request.user,
-        ordered=False
+        ordered=False,
+        size=size,
+        color=color,
     )
     order = get_active_order(request.user)
     if order:
-        if order.items.filter(item__slug=item.slug).exists():
+        if order.items.filter(pk=order_item.pk).exists():
             order_item.quantity += 1
             order_item.save()
             messages.info(request, "Item quantity was updated.")
@@ -257,17 +268,19 @@ def add_to_cart(request, slug):
 @login_required
 def remove_from_cart(request, slug):
     item = get_object_or_404(Item, slug=slug)
+    size = request.GET.get('size') or request.POST.get('size')
+    color = request.GET.get('color') or request.POST.get('color')
     order = get_active_order(request.user)
     if not order:
         messages.info(request, "You do not have an active order.")
         return redirect("core:product", slug=slug)
-    if order.items.filter(item__slug=item.slug).exists():
-        order_item = OrderItem.objects.filter(
-            item=item,
-            user=request.user,
-            ordered=False
-        ).first()
-        order.items.remove(order_item)
+    qs = order.items.filter(item=item)
+    if size:
+        qs = qs.filter(size=size)
+    if color:
+        qs = qs.filter(color=color)
+    if qs.exists():
+        order.items.remove(qs.first())
         messages.info(request, "Item was removed from your cart.")
     else:
         messages.info(request, "Item was not in your cart.")
@@ -277,16 +290,19 @@ def remove_from_cart(request, slug):
 @login_required
 def remove_single_item_from_cart(request, slug):
     item = get_object_or_404(Item, slug=slug)
+    size = request.GET.get('size') or request.POST.get('size')
+    color = request.GET.get('color') or request.POST.get('color')
     order = get_active_order(request.user)
     if not order:
         messages.info(request, "You do not have an active order.")
         return redirect("core:product", slug=slug)
-    if order.items.filter(item__slug=item.slug).exists():
-        order_item = OrderItem.objects.filter(
-            item=item,
-            user=request.user,
-            ordered=False
-        ).first()
+    qs = order.items.filter(item=item)
+    if size:
+        qs = qs.filter(size=size)
+    if color:
+        qs = qs.filter(color=color)
+    if qs.exists():
+        order_item = qs.first()
         if order_item.quantity > 1:
             order_item.quantity -= 1
             order_item.save()

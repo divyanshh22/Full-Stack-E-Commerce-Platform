@@ -23,6 +23,20 @@ ADDRESS_CHOICES = (
     ('S', 'Shipping'),
 )
 
+SIZE_CHOICES = (
+    ('S', 'S'),
+    ('M', 'M'),
+    ('L', 'L'),
+    ('XL', 'XL'),
+)
+
+COLOR_CHOICES = (
+    ('Black', 'Black'),
+    ('White', 'White'),
+    ('Gray', 'Gray'),
+    ('Blue', 'Blue'),
+)
+
 
 class Slide(models.Model):
     caption1 = models.CharField(max_length=100)
@@ -94,6 +108,8 @@ class OrderItem(models.Model):
     ordered = models.BooleanField(default=False)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
+    size = models.CharField(max_length=10, choices=SIZE_CHOICES, blank=True, null=True)
+    color = models.CharField(max_length=50, choices=COLOR_CHOICES, blank=True, null=True)
 
     def __str__(self):
         return f"{self.quantity} of {self.item.title}"

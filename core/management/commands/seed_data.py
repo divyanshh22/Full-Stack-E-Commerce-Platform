@@ -7,10 +7,10 @@ from django.core.management.base import BaseCommand
 from core.models import Category, Item
 
 CATEGORY_IMAGES = [
-    "categories/shirts.jpg",
-    "categories/tshirts.jpg",
+    "categories/shirts-and-jeans.jpg",
+    "categories/t-shirts.jpg",
     "categories/skirts.jpg",
-    "categories/hoodies.jpg",
+    "categories/hoodies-and-sweatshirts.jpg",
 ]
 ITEM_IMAGES = [
     "item-01.webp", "item-02.webp", "item-03.webp", "item-04.webp",

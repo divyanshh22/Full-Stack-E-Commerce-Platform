@@ -430,6 +430,7 @@ select { appearance: none; background-image: url("data:image/svg+xml;charset=utf
 .input-group { display: flex; gap: 10px; }
 .input-group .form-control { flex: 1; }
 .field-error { color: var(--danger); font-size: 13px; margin-top: 6px; }
+.form-error { color: var(--danger); font-size: 14px; margin: 12px 0 0; padding: 10px 12px; border: 1px solid rgba(220, 38, 38, .35); border-radius: var(--radius-sm); background: rgba(220, 38, 38, .06); display: flex; align-items: center; gap: 8px; }
 .help-text { font-size: 13px; color: var(--text-muted); margin-top: 6px; }
 .custom-select { width: 100%; padding: 11px 14px; font-size: 15px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: #fff; }
 .country-select-flag { padding-left: 40px !important; }
