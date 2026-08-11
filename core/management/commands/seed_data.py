@@ -17,6 +17,38 @@ ITEM_IMAGES = [
     "item-05.webp", "item-06.webp", "item-07.webp", "item-08.webp",
     "item-09.webp", "item-10.webp", "item-11.webp", "item-12.webp",
 ]
+PRODUCT_IMAGES = {
+    "oxford-shirt": "products/oxford-shirt.jpg",
+    "linen-shirt": "products/linen-shirt.jpg",
+    "denim-shirt": "products/denim-shirt.jpg",
+    "chambray-shirt": "products/chambray-shirt.jpg",
+    "flannel-shirt": "products/flannel-shirt.jpg",
+    "striped-shirt": "products/striped-shirt.jpg",
+    "poplin-shirt": "products/poplin-shirt.jpg",
+    "check-shirt": "products/check-shirt.jpg",
+    "classic-cotton-tee": "products/classic-cotton-tee.jpg",
+    "v-neck-tee": "products/v-neck-tee.jpg",
+    "graphic-tee": "products/graphic-tee.jpg",
+    "polo-tee": "products/polo-tee.jpg",
+    "boxy-fit-tee": "products/boxy-fit-tee.jpg",
+    "striped-tee": "products/striped-tee.jpg",
+    "raglan-tee": "products/raglan-tee.jpg",
+    "slim-fit-tee": "products/slim-fit-tee.jpg",
+    "pleated-skirt": "products/pleated-skirt.jpg",
+    "denim-skirt": "products/denim-skirt.jpg",
+    "midi-skirt": "products/midi-skirt.jpg",
+    "mini-skirt": "products/mini-skirt.jpg",
+    "wrap-skirt": "products/wrap-skirt.jpg",
+    "a-line-skirt": "products/a-line-skirt.jpg",
+    "tulle-skirt": "products/tulle-skirt.jpg",
+    "zip-hoodie": "products/zip-hoodie.jpg",
+    "pullover-hoodie": "products/pullover-hoodie.jpg",
+    "fleece-hoodie": "products/fleece-hoodie.jpg",
+    "oversized-hoodie": "products/oversized-hoodie.jpg",
+    "graphic-sweatshirt": "products/graphic-sweatshirt.jpg",
+    "crewneck-sweatshirt": "products/crewneck-sweatshirt.jpg",
+    "hooded-sweatshirt": "products/hooded-sweatshirt.jpg",
+}
 
 # (title, slug, description, image)
 CATEGORIES = [
@@ -169,8 +201,8 @@ class Command(BaseCommand):
         created = 0
         updated = 0
         for i, (title, price, discount, cat_slug, label, stock, short, long) in enumerate(PRODUCTS):
-            img = ensure_media(ITEM_IMAGES[i % len(ITEM_IMAGES)])
             slug = title.lower().replace(" & ", " ").replace(" ", "-")
+            img = ensure_media(PRODUCT_IMAGES.get(slug, ITEM_IMAGES[i % len(ITEM_IMAGES)]))
             item, was_created = Item.objects.get_or_create(
                 slug=slug,
                 defaults=dict(
