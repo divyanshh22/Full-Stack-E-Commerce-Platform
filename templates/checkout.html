@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head_title %}Checkout — Django Shop{% endblock %}
+
+{% block content %}
+
+<section class="page-hero">
+  <div class="container">
+    <h1>Checkout</h1>
+    <p>Almost there — confirm your details</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top: 40px;">
+  <div class="container">
+    <div class="checkout-layout">
+      <!-- Billing form -->
+      <div class="card">
+        <form method="POST" novalidate>
+          {% csrf_token %}
+
+          <div class="form-section">
+            <h3>Billing address</h3>
+            <div class="form-group">
+              <label for="{{ form.street_address.id_for_label }}">Street address</label>
+              {{ form.street_address }}
+              {% if form.street_address.errors %}<div class="field-error">{{ form.street_address.errors }}</div>{% endif %}
+            </div>
+
+            <div class="form-group">
+              <label for="{{ form.apartment_address.id_for_label }}">Apartment / suite <span class="help-text" style="display: inline;">(optional)</span></label>
+              {{ form.apartment_address }}
+            </div>
+
+            <div class="form-group">
+              <label for="{{ form.country.id_for_label }}">Country</label>
+              {{ form.country }}
+            </div>
+
+            <div class="form-group">
+              <label for="{{ form.zip.id_for_label }}">ZIP / Postal code</label>
+              {{ form.zip }}
+              {% if form.zip.errors %}<div class="field-error">{{ form.zip.errors }}</div>{% endif %}
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3>Payment method</h3>
+            <div class="radio-cards">
+              {% for value, name in form.fields.payment_option.choices %}
+              <label class="radio-card">
+                <input type="radio" name="payment_option" value="{{ value }}" {% if forloop.first %}checked{% endif %}>
+                <span>{% if value == 'S' %}<i class="fa-solid fa-credit-card"></i>{% else %}<i class="fa-brands fa-paypal"></i>{% endif %} {{ name }}</span>
+              </label>
+              {% endfor %}
+            </div>
+            {% if form.payment_option.errors %}<div class="field-error">{{ form.payment_option.errors }}</div>{% endif %}
+          </div>
+
+          <button type="submit" class="btn btn-dark btn-lg btn-block">
+            Continue to Payment <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </form>
+      </div>
+
+      {% include "order_snippet.html" %}
+    </div>
+  </div>
+</section>
+
+{% endblock content %}

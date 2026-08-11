@@ -1,0 +1,67 @@
+{% load static %}
+{% load cart_template_tags %}
+
+<header class="site-header">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="/" class="brand">
+        <span class="dot"></span>Django Shop
+      </a>
+
+      <nav class="nav-links" aria-label="Main">
+        <a href="/" {% if request.path == '/' %}class="active"{% endif %}>Home</a>
+        <a href="/shop/" {% if request.path == '/shop/' %}class="active"{% endif %}>Shop</a>
+        {% for c in all_categories %}
+        <a href="{{ c.get_absolute_url }}">{{ c.title }}</a>
+        {% endfor %}
+      </nav>
+
+      <div class="nav-actions">
+        {% if request.user.is_authenticated %}
+        <a href="{% url 'core:order-summary' %}" class="cart-link icon-btn" aria-label="Cart">
+          <i class="fa-solid fa-bag-shopping"></i>
+          <span class="cart-badge">{{ request.user|cart_item_count }}</span>
+        </a>
+        <form method="post" action="{% url 'account_logout' %}" style="margin: 0;">
+          {% csrf_token %}
+          <button type="submit" class="nav-account" style="border: 0; background: transparent; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer;">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+          </button>
+        </form>
+        {% else %}
+        <a href="{% url 'core:order-summary' %}" class="cart-link icon-btn" aria-label="Cart">
+          <i class="fa-solid fa-bag-shopping"></i>
+          <span class="cart-badge">{{ request.user|cart_item_count }}</span>
+        </a>
+        <a href="{% url 'account_login' %}" class="nav-account">
+          <i class="fa-solid fa-user"></i> Sign In
+        </a>
+        <a href="{% url 'account_signup' %}" class="btn btn-dark btn-sm">Get Started</a>
+        {% endif %}
+
+        <button id="menuToggle" class="hamburger" aria-label="Menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="mobileMenu" class="mobile-menu">
+    <a href="/">Home</a>
+    <a href="/shop/">Shop</a>
+    {% for c in all_categories %}
+    <a href="{{ c.get_absolute_url }}">{{ c.title }}</a>
+    {% endfor %}
+    <div class="menu-divider"></div>
+    {% if request.user.is_authenticated %}
+    <a href="{% url 'core:order-summary' %}"><i class="fa-solid fa-bag-shopping"></i> Cart <span class="cart-badge" style="position: static; display: inline-flex; margin-left: 8px;">{{ request.user|cart_item_count }}</span></a>
+    <form method="post" action="{% url 'account_logout' %}" style="margin: 0;">
+      {% csrf_token %}
+      <button type="submit" class="mobile-menu-item" style="border: 0; background: none; font-family: inherit; font-size: 15px; font-weight: 500; width: 100%; text-align: left;"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+    </form>
+    {% else %}
+    <a href="{% url 'account_login' %}"><i class="fa-solid fa-user"></i> Sign In</a>
+    <a href="{% url 'account_signup' %}"><i class="fa-solid fa-user-plus"></i> Create Account</a>
+    {% endif %}
+  </div>
+</header>

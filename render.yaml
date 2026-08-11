@@ -1,0 +1,50 @@
+databases:
+  - name: ecommerce-db
+    databaseName: ecommerce
+    user: ecommerce
+    plan: free
+    ipAllowList: []
+
+services:
+  - type: web
+    name: django-shop
+    runtime: python
+    plan: free
+    autoDeploy: true
+    healthCheckPath: /shop/
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate && python manage.py setup_site && python manage.py ensure_superuser"
+    startCommand: "python manage.py seed_data && gunicorn demo.wsgi:application --workers 2 --timeout 120"
+    releaseCommand: "python manage.py migrate && python manage.py setup_site && python manage.py ensure_superuser"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.6
+      - key: ENVIRONMENT
+        value: production
+      - key: DEBUG
+        value: "False"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_HOSTS
+        value: "full-stack-e-commerce-platform-6gy3.onrender.com"
+      - key: SITE_DOMAIN
+        value: "full-stack-e-commerce-platform-6gy3.onrender.com"
+      - key: SITE_NAME
+        value: "Django Shop"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ecommerce-db
+          property: connectionString
+      - key: STRIPE_PUBLIC_KEY
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+    disk:
+      name: media
+      mountPath: /opt/render/project/src/media_root
+      sizeGB: 1

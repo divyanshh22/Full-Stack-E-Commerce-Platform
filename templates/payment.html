@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load cart_template_tags %}
+{% block head_title %}Payment — Django Shop{% endblock %}
+
+{% block content %}
+
+<section class="page-hero">
+  <div class="container">
+    <h1>Payment</h1>
+    <p>Secure checkout powered by Stripe</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top: 40px;">
+  <div class="container">
+    <div class="checkout-layout">
+      <div class="card">
+        <div class="form-section">
+          <h3>Credit or debit card</h3>
+          <p class="help-text" style="margin-bottom: 18px;">Your payment details are encrypted and handled securely by Stripe.</p>
+
+          <form action="." method="post" id="stripe-form">
+            {% csrf_token %}
+            <div class="form-group">
+              <div id="card-element" class="StripeElement"></div>
+              <div id="card-errors" class="field-error" role="alert"></div>
+            </div>
+
+            <div class="form-check">
+              <input type="checkbox" name="save" id="save_card_info" checked>
+              <label for="save_card_info">Save my card for future purchases</label>
+            </div>
+
+            <button id="stripeBtn" type="submit" class="btn btn-dark btn-lg btn-block">
+              <i class="fa-solid fa-lock"></i> Pay {{ order.get_total|inr }}
+            </button>
+          </form>
+
+          <div style="display: flex; gap: 10px; margin-top: 14px; justify-content: center;">
+            <span style="font-size: 13px; color: var(--text-muted);"><i class="fa-solid fa-shield-halved"></i> 256-bit SSL secure</span>
+          </div>
+        </div>
+      </div>
+
+      {% include "order_snippet.html" %}
+    </div>
+  </div>
+</section>
+
+<script src="https://js.stripe.com/v3/"></script>
+
+{% endblock content %}
+
+{% block extra_scripts %}
+<style>
+  .StripeElement {
+    box-sizing: border-box;
+    height: 44px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: #fff;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .StripeElement--focus { border-color: var(--text); box-shadow: 0 0 0 3px rgba(11, 12, 14, .08); }
+  .StripeElement--invalid { border-color: var(--danger); }
+</style>
+
+<script>
+  (function () {
+    var stripe = Stripe('{{ STRIPE_PUBLIC_KEY }}');
+    var elements = stripe.elements();
+    var card = elements.create('card', {
+      style: {
+        base: {
+          color: '#0b0c0e',
+          fontFamily: '"Inter", -apple-system, sans-serif',
+          fontSize: '15px',
+          '::placeholder': { color: '#aab7c4' }
+        },
+        invalid: { color: '#dc2626', iconColor: '#dc2626' }
+      }
+    });
+    card.mount('#card-element');
+
+    card.addEventListener('change', function (event) {
+      var displayError = document.getElementById('card-errors');
+      displayError.textContent = event.error ? event.error.message : '';
+    });
+
+    var form = document.getElementById('stripe-form');
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+      var btn = document.getElementById('stripeBtn');
+      btn.disabled = true;
+      btn.textContent = 'Processing…';
+      stripe.createToken(card).then(function (result) {
+        if (result.error) {
+          var errorElement = document.getElementById('card-errors');
+          errorElement.textContent = result.error.message;
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fa-solid fa-lock"></i> Pay {{ order.get_total|inr }}';
+        } else {
+          var hiddenInput = document.createElement('input');
+          hiddenInput.setAttribute('type', 'hidden');
+          hiddenInput.setAttribute('name', 'stripeToken');
+          hiddenInput.setAttribute('value', result.token.id);
+          form.appendChild(hiddenInput);
+          form.submit();
+        }
+      });
+    });
+  })();
+</script>
+{% endblock extra_scripts %}

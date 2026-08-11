@@ -1,0 +1,34 @@
+{% load static %}
+{% load cart_template_tags %}
+<div class="product-card">
+  <div class="product-media">
+    <a href="{{ item.get_absolute_url }}">
+      <img src="{{ item.image.url }}" alt="{{ item.title }}">
+    </a>
+    {% if item.label %}
+    <div class="product-badges">
+      <span class="product-badge {{ item.get_label_display }}">{{ item.get_label_display }}</span>
+    </div>
+    {% endif %}
+    <div class="product-quick-add">
+      <a href="{{ item.get_add_to_cart_url }}" class="btn btn-dark btn-block">Add to Cart</a>
+    </div>
+  </div>
+  <div class="product-info">
+    <a href="{{ item.get_absolute_url }}" class="product-title">{{ item.title }}</a>
+    <span class="product-cat">{{ item.category }}</span>
+    <div class="product-row">
+      <div>
+        {% if item.discount_price %}
+        <span class="price-old">{{ item.price|inr }}</span>
+        <span class="price price-new">{{ item.discount_price|inr }}</span>
+        {% else %}
+        <span class="price">{{ item.price|inr }}</span>
+        {% endif %}
+      </div>
+      {% if item.discount_price %}
+      <span class="saved-chip">Save {{ item.discount_percent }}%</span>
+      {% endif %}
+    </div>
+  </div>
+</div>

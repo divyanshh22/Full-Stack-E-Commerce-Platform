@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head_title %}Request Refund — Django Shop{% endblock %}
+
+{% block content %}
+
+<section class="page-hero">
+  <div class="container">
+    <h1>Request a Refund</h1>
+    <p>Provide your order reference and we'll take care of the rest</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top: 40px;">
+  <div class="container" style="max-width: 560px;">
+    <div class="card">
+      <form method="POST" novalidate>
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="id_ref_code">Order reference code</label>
+          <input type="text" name="ref_code" id="id_ref_code" class="form-control" placeholder="e.g. 3f9k2m8q7z4t1b6w5a0v" required>
+        </div>
+
+        <div class="form-group">
+          <label for="id_email">Email address</label>
+          <input type="email" name="email" id="id_email" class="form-control" placeholder="you@example.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="id_message">Reason for refund</label>
+          <textarea name="message" id="id_message" rows="4" placeholder="Tell us what went wrong..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-dark btn-lg btn-block">
+          <i class="fa-solid fa-paper-plane"></i> Submit Request
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+{% endblock content %}

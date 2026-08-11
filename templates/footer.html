@@ -1,0 +1,57 @@
+{% load static %}
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="brand"><span class="dot"></span>Django Shop</div>
+        <p>Modern fashion essentials for everyone. Free shipping on orders over ₹2,999 and easy 30-day returns.</p>
+        <div class="social-links" style="margin-top: 18px;">
+          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+        </div>
+      </div>
+
+      <div>
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="/shop/">All Products</a></li>
+          {% for c in all_categories %}
+          <li><a href="{{ c.get_absolute_url }}">{{ c.title }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div>
+        <h4>Help</h4>
+        <ul>
+          <li><a href="#">Order Status</a></li>
+          <li><a href="#">Shipping &amp; Delivery</a></li>
+          <li><a href="{% url 'core:request-refund' %}">Request a Refund</a></li>
+          <li><a href="#">Payment Options</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Account</h4>
+        <ul>
+          <li><a href="{% url 'account_login' %}">Sign In</a></li>
+          <li><a href="{% url 'account_signup' %}">Create Account</a></li>
+          <li><a href="{% url 'core:order-summary' %}">Your Cart</a></li>
+          <li><a href="/admin/">Admin</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>&copy; {% now "Y" %} Django Shop. All rights reserved.</span>
+      <span>Developed by Divyansh</span>
+    </div>
+  </div>
+</footer>
+
+<button id="backToTop" class="back-to-top" aria-label="Back to top">
+  <i class="fa-solid fa-chevron-up"></i>
+</button>
