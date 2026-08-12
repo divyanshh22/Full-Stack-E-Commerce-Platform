@@ -180,7 +180,7 @@ On every deploy the **release command** automatically runs `migrate`, `setup_sit
 - **Stripe keys** are test keys — set your own in `.env` (`STRIPE_PUBLIC_KEY`, `STRIPE_SECRET_KEY`) to process real payments.
 - The local database is **PostgreSQL**; SQLite support was removed. Secrets never live in the repository — everything sensitive is read from `.env` (gitignored).
 
-## Project Structures
+## Project Structure
 
 ```
 ├── core/                  # Main app: models, views, urls, forms, admin
